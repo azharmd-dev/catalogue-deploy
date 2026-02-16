@@ -1,45 +1,17 @@
-pipeline {
-    agent {
-        node {
-            label 'robomart'
-        }
-    }
-    environment {
-        ACCOUNT_ID = "522534289017"
-        appVersion = ""
-        PROJECT = "robomart"
-        COMPONENT = "catalogue"
-        REGION = "us-east-1"
+@Library('jenkins-shared-library') _
 
-    }
-    options {
-        timeout(time: 30, unit: 'MINUTES')
-        disableConcurrentBuilds()
-        ansiColor('xterm')
-    }
-    parameters {
-        string(name: 'appVersion', description: 'Version of the application')
-        choice(name: 'deploy_to', choices: ['dev', 'qa', 'prod'], description: 'Select environment to deploy')
-    }
-    stages  {
-        stage ( 'Deploy' ) {
-            steps {
-                script {
-                    withAWS(region:'us-east-1', credentials: 'aws-creds') {
-                        sh """
-                            aws eks update-kubeconfig --region ${REGION} --name ${PROJECT}-${params.deploy_to}
-                            kubectl get nodes
-                        """
-                    }
-                }
-            }
+properties([
+  parameters([
+    string(name: 'appVersion', defaultValue: '', description: 'Docker image tag'),
+    string(name: 'deploy_to', defaultValue: 'dev', description: 'Environment')
+  ])
+])
 
-        }      
+def configMap = [
+    project: "robomart", 
+    component: "catalogue",
+    appVersion: (params.appVersion),
+    deploy_to: (params.deploy_to)
+]
 
-
-
-    }
-
-
-
-}
+EKSDeploy(configMap)
