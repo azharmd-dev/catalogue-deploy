@@ -1,4 +1,4 @@
 depolyement:
-  imageRepo: azharmd
-  imageVersion: v1 
+  imageRepo: 522534289017.dkr.ecr.us-east-1.amazonaws.com/robomart
+  imageVersion: IMAGE_VERSION
   component: catalogue
