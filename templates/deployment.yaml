@@ -32,7 +32,7 @@ spec:
     spec:
       containers:
       - name: catalogue
-        image: "{{ .Values.depolyement.imageRepo}}/{{ .Values.depolyement.component }}:{{ .Values.depolyement.imageVersion }}"
+        image: "{{ .Values.deployment.imageRepo}}/{{ .Values.deployment.component }}:{{ .Values.deployment.imageVersion }}"
         imagePullPolicy: Always
         envFrom:
         - configMapRef:
